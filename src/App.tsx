@@ -5,12 +5,12 @@ import Counter from './app/features/counter/Counter';
 import Posts from './app/features/posts/Posts';
 
 function App() {
-  return (
-    <div className="App">
-      <Counter />
-      <Posts />
-    </div>
-  );
+	return (
+		<div className='App'>
+			{/* <Counter /> */}
+			<Posts />
+		</div>
+	);
 }
 
 export default App;
