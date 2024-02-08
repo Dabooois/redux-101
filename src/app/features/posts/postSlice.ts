@@ -12,7 +12,7 @@ export type TPost = {
 	id: string;
 	title: string;
 	content: string;
-	userId: string;
+	userId: number;
 	reactions: {
 		thumbsUp: number;
 		heart: number;
@@ -29,7 +29,7 @@ type TPostState = {
 };
 
 type TAddReaction = {
-	id: string;
+	id: number;
 	reaction: string;
 };
 
@@ -50,6 +50,18 @@ export const fetchPosts = createAsyncThunk<TPost[]>(
 		}
 	}
 );
+
+export const newPost = createAsyncThunk<
+	TPost, // first param is return value for added post
+	Pick<TPost, 'title' | 'content' | 'userId'> // send type of param(post)
+>('posts/addPost', async (post) => {
+	try {
+		const response = await axios.post(BASE_URL, post);
+		return response.data;
+	} catch (error) {
+		return error;
+	}
+});
 
 const postSlice = createSlice({
 	name: 'posts',
@@ -75,7 +87,9 @@ const postSlice = createSlice({
 			},
 		},
 		addReaction: (state, action: PayloadAction<TAddReaction>) => {
-			const post = state.posts.find((el) => el.id === action.payload.id);
+			const post = state.posts.find(
+				(el) => Number(el.id) === action.payload.id
+			);
 
 			if (post) {
 				const result = state.posts.map((val) => {
@@ -120,6 +134,18 @@ const postSlice = createSlice({
 			.addCase(fetchPosts.rejected, (state, action) => {
 				state.status = 'failed';
 				state.error = action?.error?.message;
+			})
+			.addCase(newPost.fulfilled, (state, action) => {
+				state.status = 'succeeded';
+				action.payload.userId = Number(action.payload.userId);
+				action.payload.reactions = {
+					thumbsUp: 0,
+					heart: 0,
+					wow: 0,
+					rocket: 0,
+					coffee: 0,
+				};
+				state.posts.push(action.payload);
 			});
 	},
 });

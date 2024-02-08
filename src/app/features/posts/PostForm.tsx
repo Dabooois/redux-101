@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addPost } from './postSlice';
+import { newPost } from './postSlice';
 import { useSelector } from 'react-redux';
 import { getUsers } from '../users/userSelector';
+import { AppDispatch } from '../../store';
 
 const INITIAL_STATE = {
 	title: '',
@@ -19,7 +20,7 @@ const INITIAL_STATE = {
 const PostForm = () => {
 	const [postForm, setPostForm] = useState(INITIAL_STATE);
 	const { title, content, userId } = postForm;
-	const dispatch = useDispatch();
+	const dispatch = useDispatch<AppDispatch>();
 	const users = useSelector(getUsers);
 
 	const handleOnChage = (
@@ -32,8 +33,15 @@ const PostForm = () => {
 
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		dispatch(addPost({ ...postForm }));
-		setPostForm(INITIAL_STATE);
+		try {
+			dispatch(
+				newPost({ title, content, userId: Number(userId) })
+			).unwrap();
+
+			setPostForm(INITIAL_STATE);
+		} catch (error) {
+			throw new Error(`Error in creating new post`);
+		}
 	};
 
 	return (

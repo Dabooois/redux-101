@@ -14,7 +14,7 @@ const Reaction = ({ post }: { post: TPost }) => {
 	const dispatch = useDispatch();
 	const handleReact = (id: string, reaction: Name) => {
 		console.log({ id, reaction });
-		dispatch(addReaction({ id, reaction }));
+		dispatch(addReaction({ id: Number(id), reaction }));
 	};
 
 	const reactButtons = Object.entries(emojis).map(([name, emoji]) => {
