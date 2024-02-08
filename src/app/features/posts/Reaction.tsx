@@ -1,4 +1,3 @@
-import React from 'react';
 import { TPost, addReaction } from './postSlice';
 import { useDispatch } from 'react-redux';
 
@@ -16,17 +15,22 @@ const Reaction = ({ post }: { post: TPost }) => {
 		dispatch(addReaction({ id: Number(id), reaction }));
 	};
 
-	const reactButtons = Object.entries(emojis).map(([name, emoji]) => {
-		const newName = name as Name;
+	return (
+		<>
+			{Object.entries(emojis).map(([name, emoji]) => {
+				const newName = name as Name;
 
-		return (
-			<button key={name} onClick={() => handleReact(post.id, newName)}>
-				{emoji} {post.reactions[newName]}
-			</button>
-		);
-	});
-
-	return <div>{reactButtons}</div>;
+				return (
+					<button
+						key={name}
+						onClick={() => handleReact(post.id, newName)}
+					>
+						{emoji} {post.reactions[newName]}
+					</button>
+				);
+			})}
+		</>
+	);
 };
 
 export default Reaction;

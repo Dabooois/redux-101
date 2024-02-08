@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { postsError, postsLists, postsState } from './postsSelector';
-import PostForm from './PostForm';
+
 import PostAuthor from './PostAuthor';
 import Reaction from './Reaction';
 import { useDispatch } from 'react-redux';
@@ -43,10 +43,9 @@ const Posts = () => {
 						<p>{el.body}</p>
 						<PostAuthor userId={Number(el.userId)} />
 						<Reaction post={el} />
-						<Link to={`post/${el.id}`}>Edit</Link>
-						{/* <button onClick={() => navigate(`post/${el.id}`)}>
-							Edit
-						</button> */}
+						<div>
+							<Link to={`post/${el.id}`}>Edit</Link>
+						</div>
 					</div>
 				);
 			})}

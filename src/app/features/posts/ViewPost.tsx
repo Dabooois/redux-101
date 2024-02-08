@@ -1,7 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { TPost } from './postSlice';
-import PostAuthor from './PostAuthor';
-import Reaction from './Reaction';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store';
 import { postById, postsState } from './postsSelector';

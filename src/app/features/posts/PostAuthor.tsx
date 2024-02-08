@@ -8,7 +8,7 @@ function PostAuthor({ userId }: { userId: number }) {
 
 	return (
 		<div>
-			<p>{author?.name || 'Unknon Author'}</p>
+			<p>Authored by: {author?.name || 'Unknon Author'}</p>
 		</div>
 	);
 }
