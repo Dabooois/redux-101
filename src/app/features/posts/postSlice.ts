@@ -11,7 +11,7 @@ export const BASE_URL = 'https://jsonplaceholder.typicode.com/posts';
 export type TPost = {
 	id: string;
 	title: string;
-	content: string;
+	body: string;
 	userId: number;
 	reactions: {
 		thumbsUp: number;
@@ -53,7 +53,7 @@ export const fetchPosts = createAsyncThunk<TPost[]>(
 
 export const newPost = createAsyncThunk<
 	TPost, // first param is return value for added post
-	Pick<TPost, 'title' | 'content' | 'userId'> // send type of param(post)
+	Pick<TPost, 'title' | 'body' | 'userId'> // send type of param(post)
 >('posts/addPost', async (post) => {
 	try {
 		const response = await axios.post(BASE_URL, post);
@@ -74,12 +74,12 @@ const postSlice = createSlice({
 					posts: [...state.posts, action.payload],
 				};
 			},
-			prepare({ title, content, userId, reactions }: Omit<TPost, 'id'>) {
+			prepare({ title, body, userId, reactions }: Omit<TPost, 'id'>) {
 				return {
 					payload: {
 						id: nanoid(),
 						title,
-						content,
+						body,
 						userId,
 						reactions,
 					},

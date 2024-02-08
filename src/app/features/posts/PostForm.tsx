@@ -7,7 +7,7 @@ import { AppDispatch } from '../../store';
 
 const INITIAL_STATE = {
 	title: '',
-	content: '',
+	body: '',
 	userId: '',
 	reactions: {
 		thumbsUp: 0,
@@ -19,7 +19,7 @@ const INITIAL_STATE = {
 };
 const PostForm = () => {
 	const [postForm, setPostForm] = useState(INITIAL_STATE);
-	const { title, content, userId } = postForm;
+	const { title, body, userId } = postForm;
 	const dispatch = useDispatch<AppDispatch>();
 	const users = useSelector(getUsers);
 
@@ -34,9 +34,7 @@ const PostForm = () => {
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			dispatch(
-				newPost({ title, content, userId: Number(userId) })
-			).unwrap();
+			dispatch(newPost({ title, body, userId: Number(userId) })).unwrap();
 
 			setPostForm(INITIAL_STATE);
 		} catch (error) {
@@ -56,17 +54,17 @@ const PostForm = () => {
 				/>
 			</div>
 			<div>
-				<label htmlFor='content'>Content</label>
+				<label htmlFor='body'>Content</label>
 				<input
 					type='text'
 					onChange={handleOnChage}
-					value={content}
-					name='content'
+					value={body}
+					name='body'
 				/>
 			</div>
 
 			<div>
-				<label htmlFor='content'>Author</label>
+				<label htmlFor='userId'>Author</label>
 				<select onChange={handleOnChage} value={userId} name='userId'>
 					<option value=''>Select User</option>
 					{users.map((el) => {
