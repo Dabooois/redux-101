@@ -6,6 +6,7 @@ import Posts from './app/features/posts/Posts';
 import ViewPost from './app/features/posts/ViewPost';
 import Layout from './component/Layout';
 import PostForm from './app/features/posts/PostForm';
+import EditPost from './app/features/posts/EditPost';
 
 function App() {
 	return (
@@ -15,6 +16,7 @@ function App() {
 				<Route path='post'>
 					<Route index element={<PostForm />} />
 					<Route path=':id' element={<ViewPost />} />
+					<Route path=':id/edit' element={<EditPost />} />
 				</Route>
 			</Route>
 		</Routes>

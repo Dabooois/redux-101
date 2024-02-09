@@ -1,25 +1,37 @@
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
+import { AppDispatch, RootState } from '../../store';
 import { postById, postsState } from './postsSelector';
-import { useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { deletePost } from './postSlice';
 
 const ViewPost = () => {
 	const status = useSelector(postsState);
 	const { id } = useParams();
+	const navigate = useNavigate();
 	const post = useSelector((state: RootState) => postById(state, Number(id)));
-
+	const dispatch = useDispatch<AppDispatch>();
 	if (status === 'loading') {
 		return <>Loading....</>;
 	}
 
 	if (!post) {
-		return <>Empty. tang ina ka!</>;
+		return <>Empty....Id is not valid</>;
 	}
 
 	return (
 		<div key={post?.id}>
 			<h6>{post?.title}</h6>
 			<p>{post?.body}</p>
+			<Link to={`/post/${post.id}/edit`}>Edit</Link>
+			<button
+				onClick={() => {
+					dispatch(deletePost(`${post.id}`));
+					navigate('/');
+				}}
+			>
+				Delete
+			</button>
 		</div>
 	);
 };

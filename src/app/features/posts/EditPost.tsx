@@ -1,35 +1,36 @@
 import React, { useState } from 'react';
+
 import { useDispatch } from 'react-redux';
-import { newPost } from './postSlice';
 import { useSelector } from 'react-redux';
 import { getUserStatus, getUsers } from '../users/userSelector';
-import { AppDispatch } from '../../store';
+import { AppDispatch, RootState } from '../../store';
+import { useParams } from 'react-router-dom';
+import { editPost } from './postSlice';
+import { postById } from './postsSelector';
 import { fetchUsers } from '../users/usersSlice';
 
-export const INITIAL_STATE = {
-	title: '',
-	body: '',
-	userId: '',
-	reactions: {
-		thumbsUp: 0,
-		heart: 0,
-		wow: 0,
-		rocket: 0,
-		coffee: 0,
-	},
-};
-const PostForm = () => {
-	const [postForm, setPostForm] = useState(INITIAL_STATE);
-	const { title, body, userId } = postForm;
+const EditPost = () => {
+	const { id } = useParams();
 	const dispatch = useDispatch<AppDispatch>();
+	const toEditPost = useSelector((state: RootState) =>
+		postById(state, Number(id))
+	);
 	const users = useSelector(getUsers);
-	const userStatus = useSelector(getUserStatus);
+	const usersStatus = useSelector(getUserStatus);
+	const [postForm, setPostForm] = useState({
+		title: toEditPost?.title,
+		body: toEditPost?.body,
+		userId: toEditPost?.userId,
+	});
+
+	const { title, body, userId } = postForm;
 
 	React.useEffect(() => {
-		if (userStatus === 'idle') {
+		if (usersStatus === 'idle') {
 			dispatch(fetchUsers());
 		}
-	}, [userStatus, dispatch]);
+	}, [dispatch, usersStatus]);
+
 	const handleOnChage = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
 	) => {
@@ -41,9 +42,20 @@ const PostForm = () => {
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			dispatch(newPost({ title, body, userId: Number(userId) })).unwrap();
+			dispatch(
+				editPost({
+					title: title || '',
+					body: body || '',
+					userId: Number(userId),
+					id: String(id),
+				})
+			).unwrap();
 
-			setPostForm(INITIAL_STATE);
+			setPostForm({
+				title: '',
+				body: '',
+				userId: 0,
+			});
 		} catch (error) {
 			throw new Error(`Error in creating new post`);
 		}
@@ -89,4 +101,4 @@ const PostForm = () => {
 	);
 };
 
-export default PostForm;
+export default EditPost;

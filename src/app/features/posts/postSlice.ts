@@ -63,6 +63,42 @@ export const newPost = createAsyncThunk<
 	}
 });
 
+export const editPost = createAsyncThunk<
+	TPost, // first param is return value for added post
+	Pick<TPost, 'title' | 'body' | 'userId'> & { id: string } // send type of param(post)
+>('posts/editPost', async (post) => {
+	const { id } = post;
+	try {
+		const response = await axios.put(`${BASE_URL}/${id}`, {
+			...post,
+		});
+		return response.data;
+	} catch (error) {
+		return error;
+	}
+});
+type TDelete = { initialState: string; status: number; error: string };
+export const deletePost = createAsyncThunk<TDelete, string>(
+	'posts/deletePost',
+	async (id) => {
+		try {
+			const response = await axios.delete(`${BASE_URL}/${id}`);
+
+			return {
+				initialState: id,
+				status: 200,
+				error: response?.statusText,
+			};
+		} catch (error) {
+			return {
+				initialState: id,
+				status: 400,
+				error: error,
+			} as TDelete;
+		}
+	}
+);
+
 const postSlice = createSlice({
 	name: 'posts',
 	initialState,
@@ -146,6 +182,40 @@ const postSlice = createSlice({
 					coffee: 0,
 				};
 				state.posts.push(action.payload);
+			})
+			.addCase(editPost.fulfilled, (state, action) => {
+				state.status = 'succeeded';
+
+				if (!action?.payload?.id) {
+					console.log('update error');
+					console.log(action.payload);
+					return;
+				}
+				const { id } = action.payload;
+
+				const posts = state.posts.filter(
+					(post) => Number(post.id) !== Number(id)
+				);
+
+				const post = state.posts.filter(
+					(post) => Number(post.id) === Number(id)
+				);
+				action.payload.reactions = post[0].reactions;
+
+				state.posts = [...posts, action.payload];
+			})
+			.addCase(deletePost.fulfilled, (state, action) => {
+				const posts = state.posts.filter((post) => {
+					console.log({
+						postId: Number(post.id),
+						id: Number(action.payload.initialState),
+					});
+					return (
+						Number(post.id) !== Number(action.payload.initialState)
+					);
+				});
+
+				state.posts = posts;
 			});
 	},
 });

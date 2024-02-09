@@ -44,7 +44,7 @@ const Posts = () => {
 						<PostAuthor userId={Number(el.userId)} />
 						<Reaction post={el} />
 						<div>
-							<Link to={`post/${el.id}`}>Edit</Link>
+							<Link to={`post/${el.id}`}>View</Link>
 						</div>
 					</div>
 				);
