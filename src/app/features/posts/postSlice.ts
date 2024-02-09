@@ -8,6 +8,7 @@ import {
 } from '@reduxjs/toolkit';
 import { Name } from './Reaction';
 import axios from 'axios';
+import { RootState } from '../../store';
 
 export const BASE_URL = 'https://jsonplaceholder.typicode.com/posts';
 export type TPost = {
@@ -37,7 +38,7 @@ type TAddReaction = {
 	reaction: string;
 };
 
-const postsAdapter = createEntityAdapter({
+export const postsAdapter = createEntityAdapter({
 	selectId: (posts) => posts.id,
 	sortComparer: (a: TPost, b: TPost) => b.title.localeCompare(a.title),
 });
@@ -225,5 +226,9 @@ const postSlice = createSlice({
 
 // addPost, addReaction,
 export const { addReaction, increment } = postSlice.actions;
+
+// destructure adapter
+export const { selectAll, selectById, selectEntities, selectIds, selectTotal } =
+	postsAdapter.getSelectors((state: RootState) => state.posts);
 
 export default postSlice.reducer;
