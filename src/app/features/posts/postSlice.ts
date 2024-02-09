@@ -2,10 +2,9 @@ import {
 	PayloadAction,
 	createAsyncThunk,
 	createSlice,
-	nanoid,
 	createEntityAdapter,
 	EntityId,
-	EntityState,
+	nanoid,
 } from '@reduxjs/toolkit';
 import { Name } from './Reaction';
 import axios from 'axios';
@@ -115,26 +114,22 @@ const postSlice = createSlice({
 	name: 'posts',
 	initialState,
 	reducers: {
-		// addPost: {
-		// 	reducer(state, action: PayloadAction<TPost>) {
-		// 		return state;
-		// 		// state = {
-		// 		// 	...state,
-		// 		// 	entities: [...state.entities, action.payload],
-		// 		// };
-		// 	},
-		// 	// prepare({ title, body, userId, reactions }: Omit<TPost, 'id'>) {
-		// 	// 	return {
-		// 	// 		payload: {
-		// 	// 			id: nanoid(),
-		// 	// 			title,
-		// 	// 			body,
-		// 	// 			userId,
-		// 	// 			reactions,
-		// 	// 		},
-		// 	// 	};
-		// 	// },
-		// },
+		addPost: {
+			reducer(state, action: PayloadAction<TPost>) {
+				postsAdapter.addOne(state, action.payload);
+			},
+			prepare({ title, body, userId, reactions }: Omit<TPost, 'id'>) {
+				return {
+					payload: {
+						id: nanoid(),
+						title,
+						body,
+						userId,
+						reactions,
+					},
+				};
+			},
+		},
 		addReaction: (state, action: PayloadAction<TAddReaction>) => {
 			const { id, reaction } = action.payload;
 			const post = state.entities[id];
@@ -200,15 +195,19 @@ const postSlice = createSlice({
 			.addCase(editPost.fulfilled, (state, action) => {
 				state.status = 'succeeded';
 
-				if (!action?.payload?.id) {
-					console.log('update error');
-					console.log(action.payload);
-					return;
-				}
-				const { id } = action.payload;
-				action.payload.reactions = state.entities[id].reactions;
+				try {
+					if (!action?.payload?.id) {
+						console.log('update error');
+						console.log(action.payload);
+						return;
+					}
+					const payload = action.payload;
 
-				postsAdapter.upsertOne(state, action.payload);
+					postsAdapter.upsertOne(state, payload);
+				} catch (error) {
+					console.log(error);
+					throw new Error(`error: ${error}`);
+				}
 			})
 			.addCase(deletePost.fulfilled, (state, action) => {
 				Object.values(state.entities)

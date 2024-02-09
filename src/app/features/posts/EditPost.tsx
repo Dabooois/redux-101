@@ -57,6 +57,7 @@ const EditPost = () => {
 				userId: 0,
 			});
 		} catch (error) {
+			console.log(error);
 			throw new Error(`Error in creating new post`);
 		}
 	};
