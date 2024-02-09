@@ -1,6 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getUsers } from '../users/userSelector';
+import { Link } from 'react-router-dom';
 
 function PostAuthor({ userId }: { userId: number }) {
 	const users = useSelector(getUsers);
@@ -8,7 +9,14 @@ function PostAuthor({ userId }: { userId: number }) {
 
 	return (
 		<div>
-			<p>Authored by: {author?.name || 'Unknon Author'}</p>
+			<p>
+				Authored by:{' '}
+				{author?.name ? (
+					<Link to={`users/${author.id}/posts`}>{author.name}</Link>
+				) : (
+					'Unknon Author'
+				)}
+			</p>
 		</div>
 	);
 }

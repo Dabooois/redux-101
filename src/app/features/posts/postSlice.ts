@@ -3,6 +3,9 @@ import {
 	createAsyncThunk,
 	createSlice,
 	nanoid,
+	createEntityAdapter,
+	EntityId,
+	EntityState,
 } from '@reduxjs/toolkit';
 import { Name } from './Reaction';
 import axios from 'axios';
@@ -23,9 +26,11 @@ export type TPost = {
 };
 
 type TPostState = {
+	id: EntityId;
 	posts: TPost[];
 	status: string;
 	error: string | undefined;
+	count: number;
 };
 
 type TAddReaction = {
@@ -33,11 +38,16 @@ type TAddReaction = {
 	reaction: string;
 };
 
-const initialState = {
-	posts: [],
+const postsAdapter = createEntityAdapter({
+	selectId: (posts) => posts.id,
+	sortComparer: (a: TPost, b: TPost) => b.title.localeCompare(a.title),
+});
+
+const initialState = postsAdapter.getInitialState({
 	status: 'idle',
-	error: undefined,
-} as TPostState;
+	error: undefined || '',
+	count: 0,
+});
 
 export const fetchPosts = createAsyncThunk<TPost[]>(
 	'posts/fetchPosts',
@@ -77,7 +87,9 @@ export const editPost = createAsyncThunk<
 		return error;
 	}
 });
+
 type TDelete = { initialState: string; status: number; error: string };
+
 export const deletePost = createAsyncThunk<TDelete, string>(
 	'posts/deletePost',
 	async (id) => {
@@ -103,48 +115,50 @@ const postSlice = createSlice({
 	name: 'posts',
 	initialState,
 	reducers: {
-		addPost: {
-			reducer(state, action: PayloadAction<TPost>) {
-				state = {
-					...state,
-					posts: [...state.posts, action.payload],
-				};
-			},
-			prepare({ title, body, userId, reactions }: Omit<TPost, 'id'>) {
-				return {
-					payload: {
-						id: nanoid(),
-						title,
-						body,
-						userId,
-						reactions,
-					},
-				};
-			},
-		},
+		// addPost: {
+		// 	reducer(state, action: PayloadAction<TPost>) {
+		// 		return state;
+		// 		// state = {
+		// 		// 	...state,
+		// 		// 	entities: [...state.entities, action.payload],
+		// 		// };
+		// 	},
+		// 	// prepare({ title, body, userId, reactions }: Omit<TPost, 'id'>) {
+		// 	// 	return {
+		// 	// 		payload: {
+		// 	// 			id: nanoid(),
+		// 	// 			title,
+		// 	// 			body,
+		// 	// 			userId,
+		// 	// 			reactions,
+		// 	// 		},
+		// 	// 	};
+		// 	// },
+		// },
 		addReaction: (state, action: PayloadAction<TAddReaction>) => {
-			const post = state.posts.find(
-				(el) => Number(el.id) === action.payload.id
-			);
-
+			const { id, reaction } = action.payload;
+			const post = state.entities[id];
 			if (post) {
-				const result = state.posts.map((val) => {
-					if (post.id === val.id) {
-						return {
-							...val,
-							reactions: {
-								...val.reactions,
-								[action.payload.reaction as Name]:
-									post.reactions[
-										action.payload.reaction as Name
-									] + 1,
-							},
-						};
-					}
-					return val;
-				});
-				state.posts = result;
+				post.reactions[reaction as Name]++;
+				// const result = Object.values(state.entities).map((val) => {
+				// 	if (post.id === val.id) {
+				// 		return {
+				// 			...val,
+				// 			reactions: {
+				// 				...val.reactions,
+				// 				[action.payload.reaction as Name]:
+				// 					post.reactions[
+				// 						action.payload.reaction as Name
+				// 					] + 1,
+				// 			},
+				// 		};
+				// 	}
+				// 	return val;
+				// });
 			}
+		},
+		increment: (state) => {
+			state.count += 1;
 		},
 	},
 	extraReducers(builder) {
@@ -165,11 +179,11 @@ const postSlice = createSlice({
 					return el;
 				});
 
-				state.posts = loadedPosts;
+				postsAdapter.setAll(state, loadedPosts);
 			})
 			.addCase(fetchPosts.rejected, (state, action) => {
 				state.status = 'failed';
-				state.error = action?.error?.message;
+				state.error = action?.error?.message || '';
 			})
 			.addCase(newPost.fulfilled, (state, action) => {
 				state.status = 'succeeded';
@@ -181,7 +195,7 @@ const postSlice = createSlice({
 					rocket: 0,
 					coffee: 0,
 				};
-				state.posts.push(action.payload);
+				postsAdapter.addOne(state, action.payload);
 			})
 			.addCase(editPost.fulfilled, (state, action) => {
 				state.status = 'succeeded';
@@ -192,34 +206,25 @@ const postSlice = createSlice({
 					return;
 				}
 				const { id } = action.payload;
+				action.payload.reactions = state.entities[id].reactions;
 
-				const posts = state.posts.filter(
-					(post) => Number(post.id) !== Number(id)
-				);
-
-				const post = state.posts.filter(
-					(post) => Number(post.id) === Number(id)
-				);
-				action.payload.reactions = post[0].reactions;
-
-				state.posts = [...posts, action.payload];
+				postsAdapter.upsertOne(state, action.payload);
 			})
 			.addCase(deletePost.fulfilled, (state, action) => {
-				const posts = state.posts.filter((post) => {
-					console.log({
-						postId: Number(post.id),
-						id: Number(action.payload.initialState),
-					});
-					return (
-						Number(post.id) !== Number(action.payload.initialState)
-					);
-				});
+				Object.values(state.entities)
+					.filter((post) => {
+						return (
+							Number(post) === Number(action.payload.initialState)
+						);
+					})
+					.map((el) => el.id);
 
-				state.posts = posts;
+				postsAdapter.removeOne(state, action.payload.initialState);
 			});
 	},
 });
 
-export const { addPost, addReaction } = postSlice.actions;
+// addPost, addReaction,
+export const { addReaction, increment } = postSlice.actions;
 
 export default postSlice.reducer;
