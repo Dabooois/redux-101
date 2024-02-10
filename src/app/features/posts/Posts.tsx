@@ -1,31 +1,20 @@
-import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { useDispatch } from 'react-redux';
-
-import { AppDispatch } from '../../store';
-
-import { postsData } from './postSlice';
+import { selectAll, useGetPostsQuery } from './postSlice';
 import PostExcerpt from './PostExcerpt';
 
 const Posts = () => {
-	const dispatch = useDispatch<AppDispatch>();
-	const posts = useSelector(postsData);
+	const { isLoading, isError, isSuccess } = useGetPostsQuery();
+	const posts = useSelector(selectAll);
 
-	// if (status === 'loading') {
-	// 	return <>Loading....</>;
-	// }
+	if (isLoading) return <>Loading...</>;
+	if (isError) return <>Error...</>;
 
-	// if (status === 'failed') {
-	// 	return <>Error.... {error}</>;
-	// }
-	// console.log(posts);
 	return (
 		<>
 			<h2>Posts</h2>
-			{/* {posts.map((el) => {
-				return <PostExcerpt key={el.id} {...el} />;
-			})} */}
+			{isSuccess &&
+				posts.map((post) => <PostExcerpt key={post.id} {...post} />)}
 		</>
 	);
 };

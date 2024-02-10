@@ -18,7 +18,8 @@ const Reaction = ({ post }: { post: TPost }) => {
 
 	return (
 		<>
-			{Object.entries(emojis).map(([name, emoji]) => {
+			hello
+			{/* {Object.entries(emojis).map(([name, emoji]) => {
 				const newName = name as Name;
 
 				return (
@@ -29,7 +30,7 @@ const Reaction = ({ post }: { post: TPost }) => {
 						{emoji} {post.reactions[newName]}
 					</button>
 				);
-			})}
+			})} */}
 		</>
 	);
 };

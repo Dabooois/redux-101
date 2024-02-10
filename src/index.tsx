@@ -13,7 +13,7 @@ const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement
 );
 
-store.dispatch(extendedApiSlice.endpoints.getPosts.initiate());
+// store.dispatch(extendedApiSlice.endpoints.getPosts.initiate());
 
 root.render(
 	<React.StrictMode>

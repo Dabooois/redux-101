@@ -60,6 +60,7 @@ export const extendedApiSlice = apiSlice.injectEndpoints({
 						},
 					};
 				});
+				console.log(result);
 				return postsAdapter.setAll(initialState, result);
 			},
 			providesTags: (result) => {

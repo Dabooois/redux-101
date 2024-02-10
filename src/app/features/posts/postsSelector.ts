@@ -1,10 +1,13 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
-import { postsData, postsResult } from './postSlice';
+import { postsResult } from './postSlice';
 
 // const post = (state: RootState) => state;
 
-export const postsLists = createSelector(postsResult, (state) => state.data);
+export const postsLists = createSelector(
+	postsResult,
+	(state) => state.data?.entities
+);
 
 export const postById = createSelector(
 	[postsResult, (state: RootState, id: number) => id],
