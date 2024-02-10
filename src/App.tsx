@@ -10,25 +10,31 @@ import EditPost from './app/features/posts/EditPost';
 import UserPage from './app/features/users/UserPage';
 import UsersPage from './app/features/users/UsersPage';
 import Error404Page from './component/404Page';
+import { ApiProvider } from '@reduxjs/toolkit/query/react';
+import { apiSlice } from './app/api/apiSlice';
+import Posts2 from './app/features/posts/Posts2';
 
 function App() {
 	return (
-		<Routes>
-			<Route path='/' element={<Layout />}>
-				<Route index element={<Posts />} />
-				<Route path='post'>
-					<Route index element={<PostForm />} />
-					<Route path=':id' element={<ViewPost />} />
-					<Route path=':id/edit' element={<EditPost />} />
-				</Route>
-				<Route path='users'>
-					<Route index element={<UsersPage />} />
-					<Route path=':userId/posts' element={<UserPage />} />
-				</Route>
+		<ApiProvider api={apiSlice}>
+			<Posts2 />
+			{/* <Routes>
+				<Route path='/' element={<Layout />}>
+					<Route index element={<Posts />} />
+					<Route path='post'>
+						<Route index element={<PostForm />} />
+						<Route path=':id' element={<ViewPost />} />
+						<Route path=':id/edit' element={<EditPost />} />
+					</Route>
+					<Route path='users'>
+						<Route index element={<UsersPage />} />
+						<Route path=':userId/posts' element={<UserPage />} />
+					</Route>
 
-				<Route path='*' element={<Error404Page />} />
-			</Route>
-		</Routes>
+					<Route path='*' element={<Error404Page />} />
+				</Route>
+			</Routes> */}
+		</ApiProvider>
 	);
 }
 
