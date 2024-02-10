@@ -1,8 +1,9 @@
-import { TPost, addReaction } from './postSlice';
+import { TPost } from './postSlice';
 import { useDispatch } from 'react-redux';
 
 export type Name = 'coffee' | 'thumbsUp' | 'heart' | 'rocket' | 'wow';
 const Reaction = ({ post }: { post: TPost }) => {
+	const dispatch = useDispatch();
 	const emojis = {
 		thumbsUp: '👍',
 		heart: '❤️',
@@ -10,9 +11,9 @@ const Reaction = ({ post }: { post: TPost }) => {
 		rocket: '🚀',
 		coffee: '☕',
 	};
-	const dispatch = useDispatch();
+
 	const handleReact = (id: string, reaction: Name) => {
-		dispatch(addReaction({ id: Number(id), reaction }));
+		// dispatch(addReaction({ id: Number(id), reaction }));
 	};
 
 	return (

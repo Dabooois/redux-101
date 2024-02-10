@@ -4,13 +4,15 @@ import { useParams } from 'react-router-dom';
 import { postByUser } from '../posts/postsSelector';
 import { RootState } from '../../store';
 import Reaction from '../posts/Reaction';
+import { TPost } from '../posts/postSlice';
 
 const UserPage = () => {
 	const { userId } = useParams();
-	const userPosts = useSelector((state: RootState) =>
-		postByUser(state, Number(userId))
-	);
-	console.log(userPosts);
+	const userPosts: TPost[] = [];
+	//useSelector((state: RootState) =>
+	// 	postByUser(state, Number(userId))
+	// );
+
 	return (
 		<>
 			{userPosts.map((el) => {

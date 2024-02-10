@@ -1,12 +1,10 @@
-import { createSelector } from 'reselect';
 import { RootState } from '../../store';
+import { usersResult } from './usersSlice';
+import { createSelector } from '@reduxjs/toolkit';
 
-const users = (state: RootState) => state.users;
-
-export const getUsers = createSelector([users], (state) => state.users);
-export const getUserStatus = createSelector([users], (state) => state.status);
+export const getUsers = createSelector(usersResult, (state) => state.data);
 
 export const getUserById = createSelector(
-	[users, (state: RootState, id: number) => id],
-	(state, id) => state.users.find((user) => user.id === id)
+	[usersResult, (id: number) => id],
+	(state, id) => state.data?.entities[id]
 );

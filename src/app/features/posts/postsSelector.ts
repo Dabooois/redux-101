@@ -1,25 +1,17 @@
 import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
+import { postsData, postsResult } from './postSlice';
 
-const post = (state: RootState) => state.posts;
+// const post = (state: RootState) => state;
 
-export const postsLists = createSelector([post], (state) => state.entities);
-
-export const postsState = createSelector([post], (state) => state.status);
-
-export const postsError = createSelector([post], (state) => state.error);
-
-export const getCount = createSelector([post], (state) => state.count);
+export const postsLists = createSelector(postsResult, (state) => state.data);
 
 export const postById = createSelector(
-	[post, (state: RootState, id: number) => id],
-	(state, id) => state.entities[id]
+	[postsResult, (state: RootState, id: number) => id],
+	(state, id) => state.data?.entities[id]
 );
 
 export const postByUser = createSelector(
-	[post, (state: RootState, userId: number) => userId],
-	(state, userId) =>
-		Object.values(state.entities).filter(
-			(post) => Number(post.userId) === Number(userId)
-		)
+	[postsResult, (state: RootState, userId: number) => userId],
+	(state, userId) => Number(state.data?.entities.userId) === userId
 );

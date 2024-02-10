@@ -7,13 +7,14 @@ import { Provider } from 'react-redux';
 import { store } from './app/store';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-import { fetchPosts } from './app/features/posts/postSlice';
+import { extendedApiSlice } from './app/features/posts/postSlice';
 
 const root = ReactDOM.createRoot(
 	document.getElementById('root') as HTMLElement
 );
 
-store.dispatch(fetchPosts());
+store.dispatch(extendedApiSlice.endpoints.getPosts.initiate());
+
 root.render(
 	<React.StrictMode>
 		<Provider store={store}>

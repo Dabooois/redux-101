@@ -2,21 +2,21 @@ import React, { useState } from 'react';
 
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { getUserStatus, getUsers } from '../users/userSelector';
+import { getUsers } from '../users/userSelector';
 import { AppDispatch, RootState } from '../../store';
 import { useParams } from 'react-router-dom';
-import { editPost } from './postSlice';
+// import { editPost } from './postSlice';
 import { postById } from './postsSelector';
-import { fetchUsers } from '../users/usersSlice';
+import { TUser } from '../users/usersSlice';
 
 const EditPost = () => {
 	const { id } = useParams();
-	const dispatch = useDispatch<AppDispatch>();
+	// const dispatch = useDispatch<AppDispatch>();
 	const toEditPost = useSelector((state: RootState) =>
 		postById(state, Number(id))
 	);
-	const users = useSelector(getUsers);
-	const usersStatus = useSelector(getUserStatus);
+	const users: TUser[] = []; //useSelector(getUsers)
+
 	const [postForm, setPostForm] = useState({
 		title: toEditPost?.title,
 		body: toEditPost?.body,
@@ -24,12 +24,6 @@ const EditPost = () => {
 	});
 
 	const { title, body, userId } = postForm;
-
-	React.useEffect(() => {
-		if (usersStatus === 'idle') {
-			dispatch(fetchUsers());
-		}
-	}, [dispatch, usersStatus]);
 
 	const handleOnChage = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -42,14 +36,14 @@ const EditPost = () => {
 	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			dispatch(
-				editPost({
-					title: title || '',
-					body: body || '',
-					userId: Number(userId),
-					id: String(id),
-				})
-			).unwrap();
+			// dispatch(
+			// 	editPost({
+			// 		title: title || '',
+			// 		body: body || '',
+			// 		userId: Number(userId),
+			// 		id: String(id),
+			// 	})
+			// ).unwrap();
 
 			setPostForm({
 				title: '',
