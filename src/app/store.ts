@@ -5,16 +5,12 @@ import {
 	useSelector as useReduxSelector,
 } from 'react-redux';
 
-import { extendedApiSlice } from './features/posts/postSlice';
-
-// import { extendedUsersSlice } from './features/users/usersSlice';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { apiSlice } from './api/apiSlice';
 
 export const store = configureStore({
 	reducer: {
-		[apiSlice.reducerPath]: extendedApiSlice.reducer,
-		// users: extendedUsersSlice.reducer,
+		[apiSlice.reducerPath]: apiSlice.reducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware().concat(apiSlice.middleware),

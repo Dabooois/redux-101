@@ -1,9 +1,8 @@
-import { TPost } from './postSlice';
-import { useDispatch } from 'react-redux';
+import { TPost, useEditPostMutation } from './postSlice';
 
 export type Name = 'coffee' | 'thumbsUp' | 'heart' | 'rocket' | 'wow';
 const Reaction = ({ post }: { post: TPost }) => {
-	const dispatch = useDispatch();
+	const [addReaction] = useEditPostMutation();
 	const emojis = {
 		thumbsUp: '👍',
 		heart: '❤️',
@@ -12,14 +11,20 @@ const Reaction = ({ post }: { post: TPost }) => {
 		coffee: '☕',
 	};
 
-	const handleReact = (id: string, reaction: Name) => {
-		// dispatch(addReaction({ id: Number(id), reaction }));
+	const handleReact = async (id: string, reaction: Name) => {
+		const result = {
+			...post,
+			reactions: {
+				...post.reactions,
+				[reaction]: post.reactions[reaction] + 1,
+			},
+		};
+		await addReaction(result);
 	};
 
 	return (
 		<>
-			hello
-			{/* {Object.entries(emojis).map(([name, emoji]) => {
+			{Object.entries(emojis).map(([name, emoji]) => {
 				const newName = name as Name;
 
 				return (
@@ -30,7 +35,7 @@ const Reaction = ({ post }: { post: TPost }) => {
 						{emoji} {post.reactions[newName]}
 					</button>
 				);
-			})} */}
+			})}
 		</>
 	);
 };

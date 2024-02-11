@@ -1,19 +1,16 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 import { Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../../store';
-import { TUser } from './usersSlice';
-const UsersPage = () => {
-	const dispatch = useDispatch<AppDispatch>();
 
-	const users: TUser[] = []; // useSelector(getUsers);
-	// React.useEffect(() => {
-	// 	if (userStatus === 'idle') {
-	// 		dispatch(fetchUsers());
-	// 	}
-	// }, [dispatch, userStatus]);
+import { getUsers, useGetUsersQuery } from './usersSlice';
+import { useSelector } from 'react-redux';
+const UsersPage = () => {
+	const { isLoading, isError } = useGetUsersQuery();
+	const users = useSelector(getUsers);
+
+	if (isLoading) return <>Loading...</>;
+	if (isError) return <>Error...</>;
+
 	return (
 		<div>
 			{users.map((el) => {

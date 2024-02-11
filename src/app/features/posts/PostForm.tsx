@@ -4,7 +4,9 @@ import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 
 import { AppDispatch } from '../../store';
-import { TUser } from '../users/usersSlice';
+import { getUsers, useGetUsersQuery } from '../users/usersSlice';
+import { useAddPostMutation } from './postSlice';
+import { nanoid } from '@reduxjs/toolkit';
 
 export const INITIAL_STATE = {
 	title: '',
@@ -19,10 +21,17 @@ export const INITIAL_STATE = {
 	},
 };
 const PostForm = () => {
+	const [addPost, { isLoading, isError }] = useAddPostMutation();
+	const {
+		data,
+		isLoading: usersLoading,
+		isError: usersError,
+	} = useGetUsersQuery();
+
+	const users = data && Object.values(data.entities);
+
 	const [postForm, setPostForm] = useState(INITIAL_STATE);
 	const { title, body, userId } = postForm;
-	const dispatch = useDispatch<AppDispatch>();
-	const users: TUser[] = []; //useSelector(getUsers)
 
 	const handleOnChage = (
 		e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -32,14 +41,25 @@ const PostForm = () => {
 		setPostForm((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
+			await addPost({
+				body,
+				title,
+				id: nanoid(),
+				userId: Number(userId),
+				reactions: INITIAL_STATE.reactions,
+			}).unwrap();
+
 			setPostForm(INITIAL_STATE);
 		} catch (error) {
 			throw new Error(`Error in creating new post`);
 		}
 	};
+
+	if (isLoading || usersLoading) return <>Loading....</>;
+	if (isError || usersError) return <>Errrooooor....</>;
 
 	return (
 		<form onSubmit={handleSubmit}>
@@ -66,7 +86,8 @@ const PostForm = () => {
 				<label htmlFor='userId'>Author</label>
 				<select onChange={handleOnChage} value={userId} name='userId'>
 					<option value=''>Select User</option>
-					{users.length > 0 &&
+					{users &&
+						users.length > 0 &&
 						users.map((el) => {
 							return (
 								<option value={el.id} key={`users-${el.id}`}>

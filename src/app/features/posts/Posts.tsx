@@ -13,7 +13,7 @@ const Posts = () => {
 	return (
 		<>
 			<h2>Posts</h2>
-			{isSuccess &&
+			{!isLoading &&
 				posts.map((post) => <PostExcerpt key={post.id} {...post} />)}
 		</>
 	);

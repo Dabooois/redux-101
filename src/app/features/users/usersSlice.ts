@@ -4,6 +4,7 @@ import {
 	createSelector,
 } from '@reduxjs/toolkit';
 import { apiSlice } from '../../api/apiSlice';
+import { RootState } from '../../store';
 
 // const BASE_URL = 'https://jsonplaceholder.typicode.com/users';
 
@@ -26,58 +27,26 @@ export const extendedUsersSlice = apiSlice.injectEndpoints({
 			transformResponse: (result: TUser[]) =>
 				usersAdapter.setAll(initialState, result),
 		}),
+
+		getUser: build.query<EntityState<TUser, number>, string>({
+			query: (id) => `users/${id}`,
+		}),
 	}),
+	overrideExisting: false,
 });
 
-export const { useGetUsersQuery } = extendedUsersSlice;
+export const { useGetUsersQuery, useGetUserQuery } = extendedUsersSlice;
 
 export const usersResult = extendedUsersSlice.endpoints.getUsers.select();
 export const usersData = createSelector(usersResult, (state) => state.data);
-// type TUserSliceState = {
-// 	users: TUser[];
-// 	status: string;
-// 	error: undefined | string;
-// };
 
-// const initialState = {
-// 	users: [],
-// 	status: 'idle',
-// 	error: undefined,
-// } as TUserSliceState;
-
-// export const fetchUsers = createAsyncThunk<TUser[]>(
-// 	'posts/fetchUsers',
-// 	async () => {
-// 		try {
-// 			const response = await axios.get(BASE_URL);
-// 			return response.data;
-// 		} catch (error) {
-// 			return error;
-// 		}
-// 	}
-// );
-
-// const userSlice = createSlice({
-// 	name: 'users',
-// 	initialState,
-// 	reducers: {},
-
-// 	extraReducers(builder) {
-// 		builder
-// 			.addCase(fetchUsers.pending, (state, action) => {
-// 				state.status = 'loading';
-// 			})
-// 			.addCase(fetchUsers.fulfilled, (state, action) => {
-// 				state.status = 'succeeded';
-// 				state.users = action.payload;
-// 			})
-// 			.addCase(fetchUsers.rejected, (state, action) => {
-// 				state.status = 'failed';
-// 				state.error = action?.error?.message;
-// 			});
-// 	},
-// });
-
-// export const {} = userSlice.actions;
-
-// export default userSlice.reducer;
+// destructure adapter
+export const {
+	selectAll: getUsers,
+	selectById: getUserById,
+	selectEntities: getUserEntites,
+	selectIds: getUserIds,
+	selectTotal: getUserTotal,
+} = usersAdapter.getSelectors(
+	(state: RootState) => usersData(state) ?? initialState
+);

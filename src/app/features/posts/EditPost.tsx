@@ -1,27 +1,49 @@
 import React, { useState } from 'react';
 
-import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
-import { getUsers } from '../users/userSelector';
-import { AppDispatch, RootState } from '../../store';
-import { useParams } from 'react-router-dom';
-// import { editPost } from './postSlice';
-import { postById } from './postsSelector';
-import { TUser } from '../users/usersSlice';
+
+import { useNavigate, useParams } from 'react-router-dom';
+
+import { getUsers, useGetUsersQuery } from '../users/usersSlice';
+import { useEditPostMutation, useGetPostQuery } from './postSlice';
+
+import { INITIAL_STATE } from './PostForm';
 
 const EditPost = () => {
 	const { id } = useParams();
-	// const dispatch = useDispatch<AppDispatch>();
-	const toEditPost = useSelector((state: RootState) =>
-		postById(state, Number(id))
-	);
-	const users: TUser[] = []; //useSelector(getUsers)
+	const navigate = useNavigate();
+	const [updatePost, { isSuccess }] = useEditPostMutation();
 
-	const [postForm, setPostForm] = useState({
-		title: toEditPost?.title,
-		body: toEditPost?.body,
-		userId: toEditPost?.userId,
+	const {
+		data: toEditPost,
+		isLoading,
+		isError,
+		isFetching,
+	} = useGetPostQuery({
+		id: String(id),
 	});
+
+	const { isLoading: isLoadingUsers, isError: isErrorUsers } =
+		useGetUsersQuery();
+	const users = useSelector(getUsers);
+
+	const [postForm, setPostForm] = useState<{
+		title: string;
+		body: string;
+		userId: number;
+	}>({
+		title: '',
+		body: '',
+		userId: 0,
+	});
+
+	React.useEffect(() => {
+		setPostForm({
+			title: toEditPost?.title || '',
+			body: toEditPost?.body || '',
+			userId: Number(toEditPost?.userId) || 0,
+		});
+	}, [isLoading, toEditPost]);
 
 	const { title, body, userId } = postForm;
 
@@ -33,28 +55,25 @@ const EditPost = () => {
 		setPostForm((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		try {
-			// dispatch(
-			// 	editPost({
-			// 		title: title || '',
-			// 		body: body || '',
-			// 		userId: Number(userId),
-			// 		id: String(id),
-			// 	})
-			// ).unwrap();
-
-			setPostForm({
-				title: '',
-				body: '',
-				userId: 0,
-			});
+			await updatePost({
+				body,
+				title,
+				userId,
+				id: String(toEditPost?.id || ''),
+				reactions: toEditPost?.reactions || INITIAL_STATE.reactions,
+			}).unwrap();
+			navigate('/');
 		} catch (error) {
 			console.log(error);
 			throw new Error(`Error in creating new post`);
 		}
 	};
+
+	if (isLoading) return <>Loading....</>;
+	if (isError) return <>Errrooooor....</>;
 
 	return (
 		<form onSubmit={handleSubmit}>
@@ -81,13 +100,14 @@ const EditPost = () => {
 				<label htmlFor='userId'>Author</label>
 				<select onChange={handleOnChage} value={userId} name='userId'>
 					<option value=''>Select User</option>
-					{users.map((el) => {
-						return (
-							<option value={el.id} key={`users-${el.id}`}>
-								{el.name}
-							</option>
-						);
-					})}
+					{!isLoadingUsers &&
+						users.map((el) => {
+							return (
+								<option value={el.id} key={`users-${el.id}`}>
+									{el.name}
+								</option>
+							);
+						})}
 				</select>
 			</div>
 
