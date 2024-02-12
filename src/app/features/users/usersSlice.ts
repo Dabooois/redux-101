@@ -6,7 +6,6 @@ import {
 import { apiSlice } from '../../api/apiSlice';
 import { RootState } from '../../store';
 
-// const BASE_URL = 'https://jsonplaceholder.typicode.com/users';
 const USERS = 'Users' as const;
 export type TUser = {
 	id: number;

@@ -25,19 +25,6 @@ export type TPost = {
 	};
 };
 
-// type TPostState = {
-// 	id: EntityId;
-// 	posts: TPost[];
-// 	status: string;
-// 	error: string | undefined;
-// 	count: number;
-// };
-
-// type TAddReaction = {
-// 	id: number;
-// 	reaction: string;
-// };
-
 export const postsAdapter = createEntityAdapter({
 	selectId: (posts) => posts.id,
 	sortComparer: (a: TPost, b: TPost) => b.title.localeCompare(a.title),
@@ -118,7 +105,7 @@ export const extendedPostApiSlice = apiSlice.injectEndpoints({
 			// transformResponse: (post: TPost) =>
 			// 	postsAdapter.upsertOne(initialState, post),
 
-			invalidatesTags: (result, error, arg) => [
+			invalidatesTags: (_result, _error, arg) => [
 				{ type: POSTS, id: arg.id },
 			],
 		}),
@@ -133,7 +120,7 @@ export const extendedPostApiSlice = apiSlice.injectEndpoints({
 			// transformResponse: (postId: string) =>
 			// 	postsAdapter.removeOne(initialState, postId),
 
-			invalidatesTags: (result, error, { id }) => [
+			invalidatesTags: (_result, _error, { id }) => [
 				{ type: POSTS, id },
 				// { type: POSTS, id: 'LIST' },
 			],
@@ -160,7 +147,7 @@ export const extendedPostApiSlice = apiSlice.injectEndpoints({
 				});
 				return postsAdapter.setAll(initialState, reactions);
 			},
-			providesTags: (result, _, args: { userId: string }) => {
+			providesTags: (result) => {
 				const tags = result
 					? [
 							...result.ids.map((id) => ({ id, type: POSTS })),

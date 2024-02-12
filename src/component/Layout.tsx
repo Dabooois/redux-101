@@ -1,11 +1,6 @@
-import { useDispatch } from 'react-redux';
 import { Link, Outlet } from 'react-router-dom';
 
-import { AppDispatch } from '../app/store';
-
 const Layout = () => {
-	const dispatch = useDispatch<AppDispatch>();
-
 	return (
 		<>
 			<header>
@@ -25,7 +20,6 @@ const Layout = () => {
 						</li>
 					</ul>
 				</nav>
-				{/* <button onClick={handleCount}>Count {count}</button> */}
 			</header>
 			<main className='App'>
 				<Outlet />

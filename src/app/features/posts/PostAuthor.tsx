@@ -1,8 +1,5 @@
-import { useSelector } from 'react-redux';
-
 import { Link } from 'react-router-dom';
-import { getUserById, useGetUserQuery } from '../users/usersSlice';
-import { RootState } from '../../store';
+import { useGetUserQuery } from '../users/usersSlice';
 
 function PostAuthor({ userId }: { userId: number }) {
 	const { data: user, isLoading, isError } = useGetUserQuery(String(userId));

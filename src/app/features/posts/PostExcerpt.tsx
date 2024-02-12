@@ -1,4 +1,3 @@
-import React from 'react';
 import { TPost } from './postSlice';
 import PostAuthor from './PostAuthor';
 import Reaction from './Reaction';

@@ -1,4 +1,3 @@
-import { RootState } from '../../store';
 import { usersResult } from './usersSlice';
 import { createSelector } from '@reduxjs/toolkit';
 

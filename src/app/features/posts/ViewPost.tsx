@@ -1,10 +1,9 @@
 import { useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../store';
+import { RootState } from '../../store';
 import { postById } from './postsSelector';
 import { Link, useNavigate, useParams } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
+
 import { useDeletePostMutation } from './postSlice';
-// import { deletePost } from './postSlice';
 
 const ViewPost = () => {
 	const { id } = useParams();

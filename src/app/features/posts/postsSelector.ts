@@ -2,8 +2,6 @@ import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from '../../store';
 import { postsResult } from './postSlice';
 
-// const post = (state: RootState) => state;
-
 export const postsLists = createSelector(
 	postsResult,
 	(state) => state.data?.entities

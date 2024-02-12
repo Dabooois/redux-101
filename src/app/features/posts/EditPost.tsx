@@ -12,19 +12,17 @@ import { INITIAL_STATE } from './PostForm';
 const EditPost = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
-	const [updatePost, { isSuccess }] = useEditPostMutation();
+	const [updatePost] = useEditPostMutation();
 
 	const {
 		data: toEditPost,
 		isLoading,
 		isError,
-		isFetching,
 	} = useGetPostQuery({
 		id: String(id),
 	});
 
-	const { isLoading: isLoadingUsers, isError: isErrorUsers } =
-		useGetUsersQuery();
+	const { isLoading: isLoadingUsers } = useGetUsersQuery();
 	const users = useSelector(getUsers);
 
 	const [postForm, setPostForm] = useState<{

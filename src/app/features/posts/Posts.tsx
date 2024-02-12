@@ -4,7 +4,7 @@ import { selectAll, useGetPostsQuery } from './postSlice';
 import PostExcerpt from './PostExcerpt';
 
 const Posts = () => {
-	const { isLoading, isError, isSuccess } = useGetPostsQuery();
+	const { isLoading, isError } = useGetPostsQuery();
 	const posts = useSelector(selectAll);
 
 	if (isLoading) return <>Loading...</>;
