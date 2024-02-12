@@ -17,18 +17,18 @@ const UserPage = () => {
 
 	return (
 		<>
-			{data &&
-				data
-					.filter((post) => Number(post.userId) === Number(userId))
-					.map((el) => {
-						return (
-							<div key={el.id}>
-								<h3>{el.title}</h3>
-								<p>{el.body}</p>
-								<Reaction post={el} />
-							</div>
-						);
-					})}
+			{!isLoading &&
+				data?.ids.map((id: string) => {
+					const post = data.entities[id] as TPost;
+					console.log(post);
+					return (
+						<div key={post.id}>
+							<h3>{post.title}</h3>
+							<p>{post.body}</p>
+							<Reaction post={post} />
+						</div>
+					);
+				})}
 		</>
 	);
 };

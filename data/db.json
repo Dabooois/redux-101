@@ -70,7 +70,14 @@
       "userId": 2,
       "id": "12",
       "title": "in quibusdam tempore odit est dolorem",
-      "body": "itaque id aut magnam\npraesentium quia et ea odit et ea voluptas et\nsapiente quia nihil amet occaecati quia id voluptatem\nincidunt ea est distinctio odio"
+      "body": "itaque id aut magnam\npraesentium quia et ea odit et ea voluptas et\nsapiente quia nihil amet occaecati quia id voluptatem\nincidunt ea est distinctio odio",
+      "reactions": {
+        "thumbsUp": 1,
+        "heart": 0,
+        "wow": 0,
+        "rocket": 0,
+        "coffee": 1
+      }
     },
     {
       "userId": 2,
@@ -86,9 +93,16 @@
     },
     {
       "userId": 2,
-      "id": "16",
       "title": "sint suscipit perspiciatis velit dolorum rerum ipsa laboriosam odio",
-      "body": "suscipit nam nisi quo aperiam aut\nasperiores eos fugit maiores voluptatibus quia\nvoluptatem quis ullam qui in alias quia est\nconsequatur magni mollitia accusamus ea nisi voluptate dicta"
+      "body": "suscipit nam nisi quo aperiam aut\nasperiores eos fugit maiores voluptatibus quia\nvoluptatem quis ullam qui in alias quia est\nconsequatur magni mollitia accusamus ea nisi voluptate dicta",
+      "reactions": {
+        "thumbsUp": 1,
+        "heart": 1,
+        "wow": 1,
+        "rocket": 1,
+        "coffee": 1
+      },
+      "id": "16"
     },
     {
       "userId": 2,
@@ -98,15 +112,29 @@
     },
     {
       "userId": 2,
-      "id": "18",
       "title": "voluptate et itaque vero tempora molestiae",
-      "body": "eveniet quo quis\nlaborum totam consequatur non dolor\nut et est repudiandae\nest voluptatem vel debitis et magnam"
+      "body": "eveniet quo quis\nlaborum totam consequatur non dolor\nut et est repudiandae\nest voluptatem vel debitis et magnam",
+      "reactions": {
+        "thumbsUp": 5,
+        "heart": 1,
+        "wow": 4,
+        "rocket": 4,
+        "coffee": 1
+      },
+      "id": "18"
     },
     {
       "userId": 2,
-      "id": "19",
       "title": "adipisci placeat illum aut reiciendis qui",
-      "body": "illum quis cupiditate provident sit magnam\nea sed aut omnis\nveniam maiores ullam consequatur atque\nadipisci quo iste expedita sit quos voluptas"
+      "body": "illum quis cupiditate provident sit magnam\nea sed aut omnis\nveniam maiores ullam consequatur atque\nadipisci quo iste expedita sit quos voluptas",
+      "reactions": {
+        "thumbsUp": 0,
+        "heart": 0,
+        "wow": 0,
+        "rocket": 0,
+        "coffee": 4
+      },
+      "id": "19"
     },
     {
       "userId": 2,
@@ -278,9 +306,16 @@
     },
     {
       "userId": 5,
-      "id": "48",
       "title": "ut voluptatem illum ea doloribus itaque eos",
-      "body": "voluptates quo voluptatem facilis iure occaecati\nvel assumenda rerum officia et\nillum perspiciatis ab deleniti\nlaudantium repellat ad ut et autem reprehenderit"
+      "body": "voluptates quo voluptatem facilis iure occaecati\nvel assumenda rerum officia et\nillum perspiciatis ab deleniti\nlaudantium repellat ad ut et autem reprehenderit",
+      "reactions": {
+        "thumbsUp": 1,
+        "heart": 2,
+        "wow": 2,
+        "rocket": 1,
+        "coffee": 1
+      },
+      "id": "48"
     },
     {
       "userId": 5,
@@ -350,27 +385,6 @@
     },
     {
       "userId": 7,
-      "title": "voluptatem doloribus consectetur est ut ducimus",
-      "body": "ab nemo optio odio\ndelectus tenetur corporis similique nobis repellendus rerum omnis facilis\nvero blanditiis debitis in nesciunt doloribus dicta dolores\nmagnam minus velit",
-      "reactions": {
-        "thumbsUp": 0,
-        "heart": 2,
-        "wow": 1,
-        "rocket": 0,
-        "coffee": 0
-      },
-      "reaction": {
-        "0": 1,
-        "thumbsUp": 0,
-        "heart": 0,
-        "wow": 0,
-        "rocket": 0,
-        "coffee": 0
-      },
-      "id": "61"
-    },
-    {
-      "userId": 7,
       "id": "62",
       "title": "beatae enim quia vel",
       "body": "enim aspernatur illo distinctio quae praesentium\nbeatae alias amet delectus qui voluptate distinctio\nodit sint accusantium autem omnis\nquo molestiae omnis ea eveniet optio"
@@ -380,10 +394,10 @@
       "title": "voluptas blanditiis repellendus animi ducimus error sapiente et suscipit",
       "body": "enim adipisci aspernatur nemo\nnumquam omnis facere dolorem dolor ex quis temporibus incidunt\nab delectus culpa quo reprehenderit blanditiis asperiores\naccusantium ut quam in voluptatibus voluptas ipsam dicta",
       "reactions": {
-        "thumbsUp": 0,
-        "heart": 0,
-        "wow": 0,
-        "rocket": 0,
+        "thumbsUp": 2,
+        "heart": 2,
+        "wow": 2,
+        "rocket": 2,
         "coffee": 1
       },
       "id": "63"
@@ -540,9 +554,16 @@
     },
     {
       "userId": 9,
-      "id": "90",
       "title": "ad iusto omnis odit dolor voluptatibus",
-      "body": "minus omnis soluta quia\nqui sed adipisci voluptates illum ipsam voluptatem\neligendi officia ut in\neos soluta similique molestias praesentium blanditiis"
+      "body": "minus omnis soluta quia\nqui sed adipisci voluptates illum ipsam voluptatem\neligendi officia ut in\neos soluta similique molestias praesentium blanditiis",
+      "reactions": {
+        "thumbsUp": 0,
+        "heart": 0,
+        "wow": 0,
+        "rocket": 2,
+        "coffee": 0
+      },
+      "id": "90"
     },
     {
       "userId": 10,

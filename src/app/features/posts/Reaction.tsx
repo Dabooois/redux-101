@@ -1,8 +1,8 @@
-import { TPost, useEditPostMutation } from './postSlice';
+import { TPost, useAddReactionMutation } from './postSlice';
 
 export type Name = 'coffee' | 'thumbsUp' | 'heart' | 'rocket' | 'wow';
 const Reaction = ({ post }: { post: TPost }) => {
-	const [addReaction] = useEditPostMutation();
+	const [addReaction] = useAddReactionMutation();
 	const emojis = {
 		thumbsUp: '👍',
 		heart: '❤️',
@@ -13,13 +13,12 @@ const Reaction = ({ post }: { post: TPost }) => {
 
 	const handleReact = async (id: string, reaction: Name) => {
 		const result = {
-			...post,
 			reactions: {
 				...post.reactions,
 				[reaction]: post.reactions[reaction] + 1,
 			},
 		};
-		await addReaction(result);
+		await addReaction({ postId: id, ...result });
 	};
 
 	return (

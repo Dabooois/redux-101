@@ -10,11 +10,12 @@ const ViewPost = () => {
 	const { id } = useParams();
 	const navigate = useNavigate();
 	const post = useSelector((state: RootState) => postById(state, Number(id)));
+	const handleDeletePost = async (id: string) => await deletePost({ id });
 	const [deletePost] = useDeletePostMutation();
 	if (!post) {
 		return <>Empty....Id is not valid</>;
 	}
-	const handleDeletePost = async (id: string) => await deletePost({ id });
+
 	return (
 		<div key={post?.id}>
 			<h6>{post?.title}</h6>

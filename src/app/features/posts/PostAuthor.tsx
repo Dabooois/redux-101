@@ -5,10 +5,8 @@ import { getUserById, useGetUserQuery } from '../users/usersSlice';
 import { RootState } from '../../store';
 
 function PostAuthor({ userId }: { userId: number }) {
-	const { isLoading, isError } = useGetUserQuery(String(userId));
-	const user = useSelector((state: RootState) =>
-		getUserById(state, Number(userId))
-	);
+	const { data: user, isLoading, isError } = useGetUserQuery(String(userId));
+
 	if (isLoading) return <>Loading...</>;
 	if (isError) return <>Error...</>;
 

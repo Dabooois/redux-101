@@ -7,7 +7,7 @@ import { apiSlice } from '../../api/apiSlice';
 import { RootState } from '../../store';
 
 // const BASE_URL = 'https://jsonplaceholder.typicode.com/users';
-
+const USERS = 'Users' as const;
 export type TUser = {
 	id: number;
 	name: string;
@@ -26,13 +26,30 @@ export const extendedUsersSlice = apiSlice.injectEndpoints({
 			query: () => 'users',
 			transformResponse: (result: TUser[]) =>
 				usersAdapter.setAll(initialState, result),
+
+			providesTags: (result) => {
+				if (!result) return [{ type: USERS, id: 'LIST' }];
+
+				const tags =
+					result.ids.length > 0
+						? // Typescript accepts type of next line if I return it
+						  result.ids.map((id) => ({
+								type: USERS,
+								id,
+						  }))
+						: // Typescript also accepts type of next line if I return it
+						  [{ type: USERS, id: 'LIST' }];
+				return tags;
+			},
 		}),
 
-		getUser: build.query<EntityState<TUser, number>, string>({
+		getUser: build.query<TUser, string>({
 			query: (id) => `users/${id}`,
+			providesTags: (result, error, arg) => {
+				return [{ type: USERS, id: arg }];
+			},
 		}),
 	}),
-	overrideExisting: false,
 });
 
 export const { useGetUsersQuery, useGetUserQuery } = extendedUsersSlice;
